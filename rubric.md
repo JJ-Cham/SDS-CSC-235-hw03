@@ -20,7 +20,7 @@ _**YES**_ 3 pts: Proper x-axis
 
 _**YES**_ 3 pts: Proper y-axis
 
-__ 3 pts: Functional highlighting 
+_**YES**_ 3 pts: Functional highlighting 
 
 
 ### Phase 2:
@@ -35,7 +35,7 @@ _**YES**_ 1 pt: Proper labeling
 
 _**YES**_ 1 pt: Correct proportions 
 
-__ 3 pts: Functional response to click  
+_**YES**_ 3 pts: Functional response to click  
 
 ### General:
 
