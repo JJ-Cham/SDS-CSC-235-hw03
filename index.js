@@ -298,3 +298,143 @@ let myData = [
       "total_millions": "52"
     }
   ]
+
+  //phase 1
+
+  // Count frequency of each language family
+  const familyCounts = d3.rollup(
+    myData,
+    v => v.length,
+    d => d.family
+  );
+
+  // Convert Map to array
+  const familyArray = Array.from(familyCounts, ([family, count]) => ({
+    family,
+    count
+  }));
+
+
+  const width = 800;
+  const height = 500;
+  const margin = { top: 60, right: 30, bottom: 120, left: 60 };
+
+  const svg = d3.select("#bar-chart")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+  const x = d3.scaleBand()
+  .domain(familyArray.map(d => d.family))
+  .range([margin.left, width - margin.right])
+  .padding(0.2);
+
+  const y = d3.scaleLinear()
+  .domain([0, d3.max(familyArray, d => d.count)])
+  .nice()
+  .range([height - margin.bottom, margin.top]);
+
+
+  svg.selectAll("rect")
+  .data(familyArray)
+  .join("rect")
+  .attr("x", d => x(d.family))
+  .attr("y", d => y(d.count))
+  .attr("width", x.bandwidth())
+  .attr("height", d => height - margin.bottom - y(d.count))
+  .attr("fill", "steelblue")
+  .on("click", function(event, d) {
+
+    const isActive = d3.select(this).classed("active");
+
+    svg.selectAll("rect").classed("active", false);
+
+    if (!isActive) {
+      d3.select(this).classed("active", true);
+    }
+  });
+
+
+  // X Axis
+  svg.append("g")
+    .attr("transform", `translate(0,${height - margin.bottom})`)
+    .call(d3.axisBottom(x))
+    .selectAll("text")
+    .attr("transform", "rotate(-45)")
+    .style("text-anchor", "end");
+
+  // Y Axis
+  svg.append("g")
+    .attr("transform", `translate(${margin.left},0)`)
+    .call(d3.axisLeft(y));
+
+
+    // Title
+  svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", 30)
+    .attr("text-anchor", "middle")
+    .style("font-size", "18px")
+    .text("Frequency of Language Families");
+
+  // X Label
+  svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", height - 40)
+    .attr("text-anchor", "middle")
+    .text("Language Family");
+
+  // Y Label
+  svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -height / 2)
+    .attr("y", 20)
+    .attr("text-anchor", "middle")
+    .text("Number of Languages");
+
+
+  //pahse 2
+
+  const pieWidth = 500;
+  const pieHeight = 500;
+  const radius = 200;
+
+  const pieSvg = d3.select("#pie-chart")
+    .append("svg")
+    .attr("width", pieWidth)
+    .attr("height", pieHeight)
+    .append("g")
+    .attr("transform", `translate(${pieWidth / 2}, ${pieHeight / 2})`);
+
+
+  const pie = d3.pie()
+  .value(d => d.count);
+
+  const pieData = pie(familyArray);
+
+
+  const arc = d3.arc()
+  .innerRadius(0)
+  .outerRadius(radius);
+
+  pieSvg.selectAll("path")
+  .data(pieData)
+  .join("path")
+  .attr("d", arc)
+  .attr("fill", (d, i) => d3.schemeCategory10[i % 10])
+  .on("click", function(event, d) {
+
+    const proportion = (d.data.count / myData.length * 100).toFixed(1);
+
+    d3.select("#pie-info")
+      .text(`${d.data.family}: ${proportion}% of languages in dataset`);
+  });
+
+
+  d3.select("#pie-chart svg")
+  .append("text")
+  .attr("x", pieWidth / 2)
+  .attr("y", 30)
+  .attr("text-anchor", "middle")
+  .style("font-size", "18px")
+  .text("Proportion of Language Families");
