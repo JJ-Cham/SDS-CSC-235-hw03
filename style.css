@@ -1,3 +1,11 @@
 rect.active {
   fill: orange;
+} 
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+svg {
+  background: #fafafa;
 }

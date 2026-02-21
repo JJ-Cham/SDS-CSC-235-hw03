@@ -442,6 +442,15 @@ let myData = [
     return percent + "%";
   });
 
+  pieSvg.selectAll("text.slice-label")
+  .data(pieData)
+  .join("text")
+  .attr("class", "slice-label")
+  .attr("transform", d => `translate(${arc.centroid(d)})`)
+  .attr("text-anchor", "middle")
+  .attr("font-size", "12px")
+  .text(d => d.data.family);
+
 
   d3.select("#pie-chart svg")
   .append("text")
