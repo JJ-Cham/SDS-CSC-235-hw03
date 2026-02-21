@@ -471,3 +471,7 @@ let myData = [
       d3.select(this).classed("active", true);
     }
   });
+
+  //click
+  d3.select("#pie-info")
+  .text(`${d.data.family}: ${percent}%`);
