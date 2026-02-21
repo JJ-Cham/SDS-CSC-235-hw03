@@ -459,3 +459,15 @@ let myData = [
   .attr("text-anchor", "middle")
   .style("font-size", "18px")
   .text("Proportion of Language Families");
+
+  d3.select("#pie-chart svg")
+  .on("click", function(event, d) {
+
+    const isActive = d3.select(this).classed("active");
+
+    svg.selectAll("rect").classed("active", false);
+
+    if (!isActive) {
+      d3.select(this).classed("active", true);
+    }
+  });
