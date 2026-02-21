@@ -430,6 +430,18 @@ let myData = [
       .text(`${d.data.family}: ${proportion}% of languages in dataset`);
   });
 
+  pieSvg.selectAll("text.slice-label")
+  .data(pieData)
+  .join("text")
+  .attr("class", "slice-label")
+  .attr("transform", d => `translate(${arc.centroid(d)})`)
+  .attr("text-anchor", "middle")
+  .attr("font-size", "11px")
+  .text(d => {
+    const percent = (d.data.count / myData.length * 100).toFixed(1);
+    return percent + "%";
+  });
+
 
   d3.select("#pie-chart svg")
   .append("text")
